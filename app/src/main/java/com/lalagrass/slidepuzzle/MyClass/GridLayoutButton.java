@@ -1,13 +1,9 @@
 package com.lalagrass.slidepuzzle.MyClass;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayout;
 import android.util.AttributeSet;
-import android.util.Pair;
 import android.widget.Button;
-
-/**
- * Created by ASUS on 1/6/2017.
- */
 
 public class GridLayoutButton extends Button {
 
@@ -26,19 +22,16 @@ public class GridLayoutButton extends Button {
         super(context, attrs, defStyleAttr);
     }
 
-    public void SetPosition(int r, int c)
-    {
+    public void SetPosition(int r, int c) {
         Row = r;
         Column = c;
+        GridLayout.LayoutParams params = (GridLayout.LayoutParams) this.getLayoutParams();
+        params.columnSpec = GridLayout.spec(c, 1, 1);
+        params.rowSpec = GridLayout.spec(r, 1, 1);
+        this.setLayoutParams(params);
     }
 
-    public Pair<Integer, Integer> GetPosition()
-    {
-        return new Pair<>(Row, Column);
-    }
-
-    public int GetDistance(Pair<Integer, Integer> pos)
-    {
-        return Math.abs(pos.first - Row) + Math.abs(pos.second - Column);
+    public int GetDistance(GridLayoutButton b) {
+        return Math.abs(b.Row - Row) + Math.abs(b.Column - Column);
     }
 }

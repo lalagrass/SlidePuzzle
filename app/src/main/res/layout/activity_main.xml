@@ -11,10 +11,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.lalagrass.slidepuzzle.MainActivity">
 
+    <Button
+        android:id="@+id/bRandom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="按住洗牌" />
+
     <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        grid:alignmentMode="alignBounds"
+        android:layout_below="@+id/bRandom"
         grid:columnCount="3"
         grid:rowCount="3">
 
