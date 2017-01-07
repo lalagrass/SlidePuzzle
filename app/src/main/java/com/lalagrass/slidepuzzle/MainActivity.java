@@ -90,40 +90,30 @@ public class MainActivity extends AppCompatActivity {
         int i = r.nextInt(4);
         switch (i) {
             case 0:
-                if (_lastRandom != 2)
-                    TestAndSwitch(_bSpace.Column - 1, _bSpace.Row);
+                if (_lastRandom != 2) {
+                    TestAndSwitch(_bSpace.Row, _bSpace.Column - 1);
+                    _lastRandom = i;
+                }
                 break;
             case 1:
-                if (_lastRandom != 3)
-                    TestAndSwitch(_bSpace.Column, _bSpace.Row + 1);
+                if (_lastRandom != 3) {
+                    TestAndSwitch(_bSpace.Row + 1, _bSpace.Column);
+                    _lastRandom = i;
+                }
                 break;
             case 2:
-                if (_lastRandom != 0)
-                    TestAndSwitch(_bSpace.Column + 1, _bSpace.Row);
+                if (_lastRandom != 0) {
+                    TestAndSwitch(_bSpace.Row, _bSpace.Column + 1);
+                    _lastRandom = i;
+                }
                 break;
             case 3:
-                if (_lastRandom != 1)
-                    TestAndSwitch(_bSpace.Column, _bSpace.Row - 1);
+                if (_lastRandom != 1) {
+                    TestAndSwitch(_bSpace.Row - 1, _bSpace.Column);
+                    _lastRandom = i;
+                }
                 break;
         }
-        _lastRandom = i;
-    }
-
-    synchronized boolean IsRandoming(EnumRanState state) {
-        switch (state) {
-            case WriteTrue:
-                if (_isRandoming != true)
-                    _isRandoming = true;
-                DoRandom();
-                break;
-            case WriteFalse:
-                if (_isRandoming != false)
-                    _isRandoming = false;
-                break;
-            default:
-                break;
-        }
-        return _isRandoming;
     }
 
     void TestAndSwitch(int r, int c) {
@@ -144,5 +134,22 @@ public class MainActivity extends AppCompatActivity {
             _bSpace.SetPosition(b.Row, b.Column);
             b.SetPosition(tmpR, tmpC);
         }
+    }
+
+    synchronized boolean IsRandoming(EnumRanState state) {
+        switch (state) {
+            case WriteTrue:
+                if (_isRandoming != true)
+                    _isRandoming = true;
+                DoRandom();
+                break;
+            case WriteFalse:
+                if (_isRandoming != false)
+                    _isRandoming = false;
+                break;
+            default:
+                break;
+        }
+        return _isRandoming;
     }
 }
