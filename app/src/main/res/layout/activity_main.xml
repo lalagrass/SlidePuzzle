@@ -15,7 +15,7 @@
         android:id="@+id/bRandom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="按住洗牌" />
+        android:text="洗牌" />
 
     <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"

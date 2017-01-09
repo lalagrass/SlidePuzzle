@@ -16,13 +16,6 @@ public class MainActivity extends AppCompatActivity {
     GridLayoutButton _bSpace;
     Button _bRandom;
     int _lastRandom = 1;
-    boolean _isRandoming = false;
-
-    enum EnumRanState {
-        WriteTrue,
-        WriteFalse,
-        Read
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +41,16 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     GridLayoutButton b = (GridLayoutButton) v;
                     if (b != null) {
-                        if (!IsRandoming(EnumRanState.Read))
-                            TestAndSwitch(b);
+                        TestAndSwitch(b);
                     }
                 }
             });
         }
 
-        _bRandom.setOnTouchListener(new View.OnTouchListener() {
+        _bRandom.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        IsRandoming(EnumRanState.WriteTrue);
-                        break;
-                    default:
-                        IsRandoming(EnumRanState.WriteFalse);
-                        break;
-                }
-                return true;
+            public void onClick(View v) {
+                DoRandom();
             }
         });
     }
@@ -87,32 +70,34 @@ public class MainActivity extends AppCompatActivity {
 
     void DoRandom() {
         Random r = new Random();
-        int i = r.nextInt(4);
-        switch (i) {
-            case 0:
-                if (_lastRandom != 2) {
-                    TestAndSwitch(_bSpace.Row, _bSpace.Column - 1);
-                    _lastRandom = i;
-                }
-                break;
-            case 1:
-                if (_lastRandom != 3) {
-                    TestAndSwitch(_bSpace.Row + 1, _bSpace.Column);
-                    _lastRandom = i;
-                }
-                break;
-            case 2:
-                if (_lastRandom != 0) {
-                    TestAndSwitch(_bSpace.Row, _bSpace.Column + 1);
-                    _lastRandom = i;
-                }
-                break;
-            case 3:
-                if (_lastRandom != 1) {
-                    TestAndSwitch(_bSpace.Row - 1, _bSpace.Column);
-                    _lastRandom = i;
-                }
-                break;
+        for (int j = 0; j < 100; j++) {
+            int i = r.nextInt(4);
+            switch (i) {
+                case 0:
+                    if (_lastRandom != 2) {
+                        TestAndSwitch(_bSpace.Row, _bSpace.Column - 1);
+                        _lastRandom = i;
+                    }
+                    break;
+                case 1:
+                    if (_lastRandom != 3) {
+                        TestAndSwitch(_bSpace.Row + 1, _bSpace.Column);
+                        _lastRandom = i;
+                    }
+                    break;
+                case 2:
+                    if (_lastRandom != 0) {
+                        TestAndSwitch(_bSpace.Row, _bSpace.Column + 1);
+                        _lastRandom = i;
+                    }
+                    break;
+                case 3:
+                    if (_lastRandom != 1) {
+                        TestAndSwitch(_bSpace.Row - 1, _bSpace.Column);
+                        _lastRandom = i;
+                    }
+                    break;
+            }
         }
     }
 
@@ -134,22 +119,5 @@ public class MainActivity extends AppCompatActivity {
             _bSpace.SetPosition(b.Row, b.Column);
             b.SetPosition(tmpR, tmpC);
         }
-    }
-
-    synchronized boolean IsRandoming(EnumRanState state) {
-        switch (state) {
-            case WriteTrue:
-                if (_isRandoming != true)
-                    _isRandoming = true;
-                DoRandom();
-                break;
-            case WriteFalse:
-                if (_isRandoming != false)
-                    _isRandoming = false;
-                break;
-            default:
-                break;
-        }
-        return _isRandoming;
     }
 }
