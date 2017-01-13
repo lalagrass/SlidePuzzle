@@ -16,6 +16,19 @@ public class PuzzleLayout extends GridLayout{
     GridLayoutButton _bSpace;
     int _lastRandom = 1;
 
+    private OnPuzzleListener _listener;
+
+    public interface OnPuzzleListener
+    {
+        public void onStep();
+        public void onFinish();
+    }
+
+    public void setOnPuzzleListener(OnPuzzleListener listener)
+    {
+        _listener = listener;
+    }
+
     public PuzzleLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         Init(context);
@@ -55,7 +68,11 @@ public class PuzzleLayout extends GridLayout{
                 public void onClick(View v) {
                     GridLayoutButton b = (GridLayoutButton) v;
                     if (b != null) {
-                        TestAndSwitch(b);
+                        boolean clicked = TestAndSwitch(b);
+                        if (clicked && _listener != null)
+                        {
+                            _listener.onStep();
+                        }
                     }
                 }
             });
@@ -119,12 +136,15 @@ public class PuzzleLayout extends GridLayout{
         TestAndSwitch(b);
     }
 
-    synchronized void TestAndSwitch(GridLayoutButton b) {
+    synchronized boolean TestAndSwitch(GridLayoutButton b) {
+        boolean ret = false;
         if (b != null && _bSpace.GetDistance(b) == 1) {
+            ret = true;
             int tmpR = _bSpace.Row;
             int tmpC = _bSpace.Column;
             _bSpace.SetPosition(b.Row, b.Column);
             b.SetPosition(tmpR, tmpC);
         }
+        return ret;
     }
 }
