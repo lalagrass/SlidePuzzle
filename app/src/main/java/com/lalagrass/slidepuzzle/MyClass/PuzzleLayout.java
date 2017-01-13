@@ -10,22 +10,22 @@ import com.lalagrass.slidepuzzle.R;
 
 import java.util.Random;
 
-public class PuzzleLayout extends GridLayout{
+public class PuzzleLayout extends GridLayout {
 
+    boolean _gameStart;
     GridLayoutButton[] _b;
     GridLayoutButton _bSpace;
     int _lastRandom = 1;
 
     private OnPuzzleListener _listener;
 
-    public interface OnPuzzleListener
-    {
+    public interface OnPuzzleListener {
         public void onStep();
+
         public void onFinish();
     }
 
-    public void setOnPuzzleListener(OnPuzzleListener listener)
-    {
+    public void setOnPuzzleListener(OnPuzzleListener listener) {
         _listener = listener;
     }
 
@@ -44,8 +44,7 @@ public class PuzzleLayout extends GridLayout{
         Init(context);
     }
 
-    private void Init(Context context)
-    {
+    private void Init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.layout_puzzle, this, true);
         _b = new GridLayoutButton[8];
         _b[0] = (GridLayoutButton) this.findViewById(R.id.b1);
@@ -60,18 +59,16 @@ public class PuzzleLayout extends GridLayout{
         Reset();
     }
 
-    public void InitTouch()
-    {
+    public void InitTouch() {
         for (int i = 0; i < 8; i++) {
             _b[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     GridLayoutButton b = (GridLayoutButton) v;
                     if (b != null) {
-                        boolean clicked = TestAndSwitch(b);
-                        if (clicked && _listener != null)
-                        {
-                            _listener.onStep();
+                        boolean moved = TestAndSwitch(b);
+                        if (moved) {
+                            NotifyStep();
                         }
                     }
                 }
@@ -144,6 +141,48 @@ public class PuzzleLayout extends GridLayout{
             int tmpC = _bSpace.Column;
             _bSpace.SetPosition(b.Row, b.Column);
             b.SetPosition(tmpR, tmpC);
+        }
+        return ret;
+    }
+
+    public void GameStart() {
+        _gameStart = true;
+    }
+
+    public void GameEnd() {
+        _gameStart = false;
+    }
+
+    private void NotifyFinish() {
+        if (_gameStart && _listener != null) {
+            _listener.onFinish();
+        }
+    }
+
+    private void NotifyStep() {
+        if (_gameStart && _listener != null) {
+            _listener.onStep();
+            if (IsGameSuccess()) {
+                NotifyFinish();
+                GameEnd();
+            }
+        }
+    }
+
+    private boolean IsGameSuccess() {
+        boolean ret = false;
+        if (_bSpace.Row == 2 && _bSpace.Column == 2) {
+            ret = true;
+            for (int i = 0; i < 8; i++) {
+                int thisRow = i / 3;
+                int thisCol = i % 3;
+                if (_b[i].Row == thisRow && _b[i].Column == thisCol) {
+                    continue;
+                } else {
+                    ret = false;
+                    break;
+                }
+            }
         }
         return ret;
     }
