@@ -17,7 +17,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean _gameRunning = false;
     Button _bRandom;
     PuzzleLayout _puzzleLayout;
     TextView _tStep;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                _gameRunning = false;
                 StopTime();
                 ShowSuccess();
             }
@@ -55,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 Reset();
                 _puzzleLayout.DoRandom();
                 Reset();
-                if (!_gameRunning) {
-                    _gameRunning = true;
+                if (!_puzzleLayout.IsGameStarted()) {
                     StartTime();
                     _puzzleLayout.GameStart();
                 }
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     void Reset()
     {
-        _gameRunning = false;
+        _puzzleLayout.GameEnd();
         StopTime();
         TimeReset();
         StepReset();
@@ -147,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (_gameRunning)
+        if (_puzzleLayout.IsGameStarted())
         {
             StartTime();
         }

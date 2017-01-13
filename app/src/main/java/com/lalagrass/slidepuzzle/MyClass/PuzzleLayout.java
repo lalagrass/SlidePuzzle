@@ -153,6 +153,11 @@ public class PuzzleLayout extends GridLayout {
         _gameStart = false;
     }
 
+    public boolean IsGameStarted()
+    {
+        return _gameStart;
+    }
+
     private void NotifyFinish() {
         if (_gameStart && _listener != null) {
             _listener.onFinish();
